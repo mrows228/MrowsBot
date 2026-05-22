@@ -2,296 +2,223 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>MrowsBot</title>
-
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-
 <style>
 
 :root{
-
-    --bg1:#0d1026;
-    --bg2:#18163b;
-
+    --bg1:#0d0e24;
+    --bg2:#1a1040;
+    --bg3:#0f1535;
     --card:#232544;
-
     --accent:#8b5cf6;
     --accent2:#b06cff;
-
     --text:#ffffff;
     --muted:#b7b9d6;
-
     --danger:#ff5f7a;
-
     --radius:24px;
-
 }
 
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+    height:100%;
+    width:100%;
+    overflow-x:hidden;
 }
 
 body{
-
     background:
-        linear-gradient(
-            160deg,
-            var(--bg1),
-            var(--bg2)
-        );
-
+        radial-gradient(ellipse at 20% 0%, #2d1b69 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 10%, #1a0a4a 0%, transparent 45%),
+        radial-gradient(ellipse at 50% 80%, #0e1540 0%, transparent 60%),
+        linear-gradient(160deg, #0d0e24 0%, #130d3a 40%, #0a1530 100%);
     color:var(--text);
-
-    font-family:
-        Inter,
-        sans-serif;
-
+    font-family: 'Segoe UI', system-ui, sans-serif;
     min-height:100vh;
-
     overflow-x:hidden;
 }
 
 .app{
-    padding:20px;
-    padding-bottom:120px;
+    padding:16px;
+    padding-bottom:100px;
+    max-width:600px;
+    margin:0 auto;
 }
 
 .header{
     display:flex;
     align-items:center;
-    gap:16px;
-
-    margin-bottom:24px;
+    gap:14px;
+    margin-bottom:22px;
 }
 
 .logo{
-
-    width:74px;
-    height:74px;
-
-    border-radius:22px;
-
+    width:62px;
+    height:62px;
+    border-radius:20px;
     object-fit:cover;
-
-    animation:
-        logoFloat 4s ease-in-out infinite;
-
-    box-shadow:
-        0 0 30px rgba(139,92,246,.35);
+    animation:logoFloat 4s ease-in-out infinite;
+    box-shadow:0 0 30px rgba(139,92,246,.35);
+    flex-shrink:0;
 }
 
 @keyframes logoFloat{
-
-    0%{
-        transform:translateY(0px);
-    }
-
-    50%{
-        transform:translateY(-6px);
-    }
-
-    100%{
-        transform:translateY(0px);
-    }
+    0%{transform:translateY(0px);}
+    50%{transform:translateY(-6px);}
+    100%{transform:translateY(0px);}
 }
 
 .header h1{
-    font-size:42px;
+    font-size:clamp(26px, 8vw, 42px);
     font-weight:800;
+    line-height:1.1;
 }
 
 .header p{
     color:var(--muted);
+    font-size:clamp(11px, 3.5vw, 14px);
 }
 
 .main-content{
     position:relative;
-    min-height:100vh;
-    overflow:hidden;
+    min-height:60vh;
 }
 
 .tab-content{
-
     position:absolute;
     inset:0;
-
     opacity:0;
-
-    transform:
-        perspective(1400px)
-        rotateY(18deg)
-        translateX(40px);
-
-    transition:
-        opacity 1s ease,
-        transform 1s ease;
-
+    transform:perspective(1400px) rotateY(18deg) translateX(40px);
+    transition:opacity .8s ease, transform .8s ease;
     pointer-events:none;
 }
 
 .tab-content.active{
-
     opacity:1;
-
-    transform:
-        perspective(1400px)
-        rotateY(0deg)
-        translateX(0);
-
+    transform:perspective(1400px) rotateY(0deg) translateX(0);
     pointer-events:auto;
+    position:relative;
 }
 
 .card{
-
-    background:
-        rgba(35,37,68,.88);
-
-    border:
-        1px solid rgba(255,255,255,.06);
-
+    background:rgba(35,37,68,.88);
+    border:1px solid rgba(255,255,255,.06);
     border-radius:var(--radius);
-
-    padding:22px;
-
-    margin-bottom:20px;
-
+    padding:18px;
+    margin-bottom:18px;
     backdrop-filter:blur(18px);
-
-    box-shadow:
-        0 0 45px rgba(0,0,0,.24);
+    box-shadow:0 0 45px rgba(0,0,0,.24);
+    width:100%;
+    overflow:hidden;
 }
 
 .card h2{
-    margin-bottom:18px;
+    margin-bottom:16px;
+    font-size:clamp(15px,4.5vw,18px);
 }
 
 input{
-
     width:100%;
-
     border:none;
-
     outline:none;
-
     background:#313456;
-
     color:white;
-
-    border-radius:18px;
-
-    padding:16px;
-
-    margin-bottom:14px;
-
+    border-radius:14px;
+    padding:13px 14px;
+    margin-bottom:12px;
     font-size:15px;
+    -webkit-appearance:none;
+}
+
+input[type="date"],
+input[type="time"]{
+    color-scheme:dark;
 }
 
 button{
-
     border:none;
-
     cursor:pointer;
-
     transition:.35s;
+    font-family:inherit;
 }
 
 .primary-btn{
-
     width:100%;
-
-    padding:16px;
-
-    border-radius:18px;
-
+    padding:14px;
+    border-radius:16px;
     color:white;
-
     font-weight:700;
-
-    background:
-        linear-gradient(
-            45deg,
-            var(--accent),
-            var(--accent2)
-        );
+    font-size:15px;
+    background:linear-gradient(45deg, var(--accent), var(--accent2));
 }
 
-.primary-btn:hover{
-    transform:translateY(-2px);
+.primary-btn:active{
+    transform:scale(0.97);
 }
 
+/* ── BOTTOM NAV ── */
 .bottom-nav{
-
     position:fixed;
-
-    left:12px;
-    right:12px;
-    bottom:12px;
-
+    left:0;
+    right:0;
+    bottom:0;
     display:flex;
-    gap:10px;
-
-    padding:10px;
-
-    border-radius:28px;
-
-    background:
-        rgba(18,20,40,.92);
-
-    backdrop-filter:blur(16px);
-
+    gap:0;
+    padding:8px 8px 12px;
+    background:rgba(12,13,32,.96);
+    backdrop-filter:blur(20px);
+    border-top:1px solid rgba(255,255,255,.07);
     z-index:999;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+}
+
+.bottom-nav::-webkit-scrollbar{
+    display:none;
 }
 
 .nav-btn{
-
-    flex:1;
-
-    padding:14px;
-
-    border-radius:18px;
-
-    color:white;
-
-    background:#262947;
-
+    flex:0 0 auto;
+    min-width:64px;
+    padding:10px 14px;
+    border-radius:14px;
+    color:rgba(255,255,255,.65);
+    background:transparent;
     font-weight:600;
+    font-size:clamp(11px,3.2vw,13px);
+    white-space:nowrap;
+    transition:.25s;
 }
 
 .nav-btn.active{
-
-    background:
-        linear-gradient(
-            45deg,
-            var(--accent),
-            var(--accent2)
-        );
-
-    box-shadow:
-        0 0 25px rgba(139,92,246,.45);
+    background:linear-gradient(45deg, var(--accent), var(--accent2));
+    color:white;
+    box-shadow:0 0 20px rgba(139,92,246,.4);
 }
 
+/* ── ITEMS ── */
 .item-card{
-
     background:#313456;
-
-    border-radius:22px;
-
-    padding:18px;
-
-    margin-bottom:16px;
-
+    border-radius:20px;
+    padding:16px;
+    margin-bottom:14px;
     animation:fade .5s ease;
+    word-break:break-word;
+    overflow:hidden;
 }
 
 .item-title{
-    font-size:21px;
+    font-size:clamp(16px,4.5vw,21px);
     font-weight:700;
     margin-bottom:8px;
 }
@@ -299,322 +226,429 @@ button{
 .item-text{
     color:#d5d8ff;
     line-height:1.7;
+    font-size:clamp(13px,3.8vw,15px);
+    overflow-wrap:break-word;
+}
+
+.item-text img{
+    max-width:100%;
+    height:auto;
 }
 
 .item-date{
-    margin-top:12px;
+    margin-top:10px;
     color:#aaaef5;
+    font-size:13px;
 }
 
 .item-actions{
-
     display:flex;
-    gap:10px;
-
-    margin-top:18px;
+    gap:8px;
+    margin-top:14px;
 }
 
 .edit-btn,
 .delete-btn{
-
     flex:1;
-
-    padding:13px;
-
-    border-radius:16px;
-
+    padding:11px;
+    border-radius:14px;
     color:white;
+    font-size:13px;
+    font-weight:600;
 }
 
 .edit-btn{
-    background:
-        linear-gradient(
-            45deg,
-            #7b5cff,
-            #a970ff
-        );
+    background:linear-gradient(45deg,#7b5cff,#a970ff);
 }
 
 .delete-btn{
     background:#5a3340;
 }
 
-.fade-in{
-    animation:fade .5s ease;
-}
+.fade-in{animation:fade .5s ease;}
 
 @keyframes fade{
-
-    from{
-        opacity:0;
-        transform:translateY(12px);
-    }
-
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
+    from{opacity:0;transform:translateY(12px);}
+    to{opacity:1;transform:translateY(0);}
 }
 
 .motivation-box{
-
-    margin-bottom:18px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(139,92,246,.18),
-            rgba(96,165,250,.10)
-        );
-
-    border:
-        1px solid rgba(255,255,255,.08);
-
-    border-radius:24px;
-
-    padding:18px;
-
+    margin-bottom:16px;
+    background:linear-gradient(135deg,rgba(139,92,246,.18),rgba(96,165,250,.10));
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:20px;
+    padding:16px;
     line-height:1.7;
-
     color:white;
-
     animation:fade 1s ease;
+    font-size:clamp(13px,3.8vw,15px);
 }
 
+/* ── QUILL ── */
 .ql-toolbar{
-
     border:none !important;
-
-    border-radius:18px 18px 0 0;
-
+    border-radius:14px 14px 0 0;
     background:#2a2d4d;
+    flex-wrap:wrap;
 }
 
 .ql-container{
-
     border:none !important;
-
     background:#313456;
-
-    border-radius:0 0 18px 18px;
-
+    border-radius:0 0 14px 14px;
     color:white;
-
-    min-height:180px;
-
-    font-size:16px;
+    min-height:160px;
+    font-size:15px;
 }
 
-.ql-editor{
-    color:white;
-}
+.ql-editor{color:white;word-break:break-word;}
+.ql-snow .ql-stroke{stroke:white !important;}
+.ql-snow .ql-fill{fill:white !important;}
+.ql-picker{color:white !important;}
+.ql-picker-options{background:#2a2d4d !important;color:white !important;}
 
-.ql-snow .ql-stroke{
-    stroke:white !important;
-}
-
-.ql-snow .ql-fill{
-    fill:white !important;
-}
-
-.ql-picker{
-    color:white !important;
-}
-
+/* ── TOAST ── */
 #toast{
-
     position:fixed;
-
     left:50%;
-    bottom:100px;
-
+    bottom:90px;
     transform:translateX(-50%);
-
     background:#1f223d;
-
     color:white;
-
-    padding:14px 24px;
-
-    border-radius:18px;
-
+    padding:12px 22px;
+    border-radius:16px;
     opacity:0;
-
     transition:.4s;
-
     z-index:9999;
+    white-space:nowrap;
+    font-size:14px;
+    pointer-events:none;
 }
 
-#toast.show{
-    opacity:1;
-}
+#toast.show{opacity:1;}
 
 .empty-card{
-
     background:#2c2f50;
-
-    border-radius:20px;
-
-    padding:20px;
-
+    border-radius:18px;
+    padding:18px;
     text-align:center;
-
     color:#b8bbe0;
+    font-size:14px;
+}
+
+/* ── EDIT MODAL ── */
+.modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    backdrop-filter:blur(6px);
+    z-index:10000;
+    display:none;
+    align-items:flex-end;
+    justify-content:center;
+    padding:12px;
+}
+
+.modal-overlay.open{
+    display:flex;
+}
+
+.modal-box{
+    background:#1e2040;
+    border-radius:24px 24px 16px 16px;
+    padding:20px;
+    width:100%;
+    max-width:560px;
+    max-height:90vh;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    animation:slideUp .35s ease;
+}
+
+@keyframes slideUp{
+    from{transform:translateY(60px);opacity:0;}
+    to{transform:translateY(0);opacity:1;}
+}
+
+.modal-box h3{
+    font-size:17px;
+    font-weight:700;
+    margin-bottom:4px;
+}
+
+.modal-box input{
+    margin-bottom:0;
+}
+
+.modal-actions{
+    display:flex;
+    gap:10px;
+    margin-top:4px;
+}
+
+.modal-save-btn{
+    flex:1;
+    padding:13px;
+    border-radius:14px;
+    color:white;
+    font-weight:700;
+    font-size:15px;
+    background:linear-gradient(45deg,var(--accent),var(--accent2));
+}
+
+.modal-cancel-btn{
+    flex:1;
+    padding:13px;
+    border-radius:14px;
+    color:white;
+    font-weight:600;
+    font-size:15px;
+    background:#3a3d60;
+}
+
+/* ── SUPPORT ── */
+#support{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:10px 0 30px;
+    text-align:center;
+}
+
+.support-img-wrap{
+    margin-bottom:24px;
+}
+
+.support-img-wrap img{
+    width:clamp(120px,40vw,180px);
+    height:clamp(120px,40vw,180px);
+    object-fit:contain;
+    animation:agentFloat 3.5s ease-in-out infinite;
+    filter:drop-shadow(0 10px 30px rgba(139,92,246,.5));
+    border-radius:50%;
+}
+
+@keyframes agentFloat{
+    0%{transform:translateY(0px);}
+    50%{transform:translateY(-12px);}
+    100%{transform:translateY(0px);}
+}
+
+.support-title{
+    font-size:clamp(20px,6vw,28px);
+    font-weight:800;
+    background:linear-gradient(90deg,#a78bfa,#60a5fa);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+    margin-bottom:10px;
+}
+
+.support-desc{
+    color:var(--muted);
+    line-height:1.75;
+    font-size:clamp(13px,3.8vw,15px);
+    max-width:420px;
+    margin:0 auto 22px;
+}
+
+.support-contact-card{
+    background:rgba(35,37,68,.88);
+    border:1px solid rgba(139,92,246,.25);
+    border-radius:20px;
+    padding:18px 22px;
+    width:100%;
+    max-width:380px;
+    margin-bottom:14px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.support-contact-label{
+    color:var(--muted);
+    font-size:12px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+}
+
+.support-contact-value{
+    font-size:16px;
+    font-weight:700;
+    color:var(--accent2);
+}
+
+.support-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:rgba(139,92,246,.15);
+    border:1px solid rgba(139,92,246,.3);
+    border-radius:50px;
+    padding:8px 18px;
+    font-size:13px;
+    color:#c4b5fd;
+    margin-top:8px;
+}
+
+.support-badge::before{
+    content:'';
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#4ade80;
+    box-shadow:0 0 8px #4ade80;
+    flex-shrink:0;
+}
+
+/* ── SALUTE / FIREWORKS ── */
+#fireworks-canvas{
+    position:fixed;
+    inset:0;
+    z-index:10001;
+    pointer-events:none;
+    opacity:0;
+    transition:opacity .5s;
+}
+
+#fireworks-canvas.active{
+    opacity:1;
 }
 
 </style>
 </head>
 <body>
 
+<canvas id="fireworks-canvas"></canvas>
+
 <div class="app">
 
 <div class="header">
-
-<img src="logo.png" class="logo">
-
-<div>
-<h1>MrowsBot</h1>
-<p>Твой личный помощник и дневник</p>
-</div>
-
+    <img src="logo.png" class="logo" alt="logo">
+    <div>
+        <h1>MrowsBot</h1>
+        <p>Твой личный помощник и дневник</p>
+    </div>
 </div>
 
 <div class="main-content">
 
 <!-- NOTES -->
-
 <div class="tab-content active" id="notes">
-
-<div class="card">
-
-<h2>📝 Добавить заметку</h2>
-
-<input id="noteTitle" placeholder="Название">
-
-<input id="noteText" placeholder="Текст">
-
-<button class="primary-btn" id="addNoteBtn">
-Сохранить
-</button>
-
-</div>
-
-<div id="notesList"></div>
-
+    <div class="card">
+        <h2>📝 Добавить заметку</h2>
+        <input id="noteTitle" placeholder="Название">
+        <div id="noteEditor"></div>
+        <br>
+        <button class="primary-btn" id="addNoteBtn">Сохранить</button>
+    </div>
+    <div id="notesList"></div>
 </div>
 
 <!-- STUDY -->
-
 <div class="tab-content" id="study">
-
-<div class="motivation-box" id="motivationText"></div>
-
-<div class="card">
-
-<h2>📚 Учебная запись</h2>
-
-<input id="studyTitle" placeholder="Тема / предмет">
-
-<div id="studyEditor"></div>
-
-<br>
-
-<button class="primary-btn" id="addStudyBtn">
-Сохранить
-</button>
-
+    <div class="motivation-box" id="motivationText"></div>
+    <div class="card">
+        <h2>📚 Учебная запись</h2>
+        <input id="studyTitle" placeholder="Тема / предмет">
+        <div id="studyEditor"></div>
+        <br>
+        <button class="primary-btn" id="addStudyBtn">Сохранить</button>
+    </div>
+    <div id="studyList"></div>
 </div>
 
-<div id="studyList"></div>
-
-</div>
-
-<!-- REMINDER -->
-
+<!-- REMINDERS -->
 <div class="tab-content" id="reminders">
-
-<div class="card">
-
-<h2>⏰ Напоминание</h2>
-
-<input id="reminderTitle" placeholder="Название">
-
-<input id="reminderText" placeholder="Описание">
-
-<input type="date" id="reminderDate">
-
-<input type="time" id="reminderTime">
-
-<button class="primary-btn" id="addReminderBtn">
-Создать
-</button>
-
-</div>
-
-<div id="reminderList"></div>
-
+    <div class="card">
+        <h2>⏰ Напоминание</h2>
+        <input id="reminderTitle" placeholder="Название">
+        <input id="reminderText" placeholder="Описание">
+        <input type="date" id="reminderDate">
+        <input type="time" id="reminderTime">
+        <button class="primary-btn" id="addReminderBtn">Создать</button>
+    </div>
+    <div id="reminderList"></div>
 </div>
 
 <!-- PERSONAL -->
-
 <div class="tab-content" id="personal">
-
-<div class="card">
-
-<h2>🌙 Личное</h2>
-
-<input id="personalTitle" placeholder="Заголовок">
-
-<input id="personalText" placeholder="Текст">
-
-<button class="primary-btn" id="addPersonalBtn">
-Сохранить
-</button>
-
+    <div class="card">
+        <h2>🌙 Личное</h2>
+        <input id="personalTitle" placeholder="Заголовок">
+        <input id="personalText" placeholder="Текст">
+        <button class="primary-btn" id="addPersonalBtn">Сохранить</button>
+    </div>
+    <div id="personalList"></div>
 </div>
 
-<div id="personalList"></div>
-
+<!-- SUPPORT -->
+<div class="tab-content" id="support">
+    <div class="support-img-wrap">
+        <img src="supportagent.png" alt="Поддержка">
+    </div>
+    <div class="support-title">Служба поддержки</div>
+    <p class="support-desc">
+        Мы здесь, чтобы помочь тебе в любой момент.<br>
+        Если что-то работает не так, как ожидалось, или у тебя есть идея для улучшения — напиши нам.<br>
+        Каждое обращение важно и будет рассмотрено лично.
+    </p>
+    <div class="support-contact-card">
+        <div class="support-contact-label">Telegram</div>
+        <div class="support-contact-value">@dmcpavel</div>
+    </div>
+    <div class="support-contact-card">
+        <div class="support-contact-label">Что можно сообщить</div>
+        <div class="support-contact-value" style="font-size:14px;font-weight:500;color:#d5d8ff;line-height:1.6">
+            🐛 Баг или ошибка в работе<br>
+            💡 Идея или пожелание<br>
+            ❓ Вопрос по использованию<br>
+            🔧 Проблема с синхронизацией
+        </div>
+    </div>
+    <div class="support-badge">Обычно отвечаем в течение дня</div>
 </div>
 
-</div>
+</div><!-- /main-content -->
+</div><!-- /app -->
 
-</div>
-
+<!-- BOTTOM NAV -->
 <div class="bottom-nav">
-
-<button class="nav-btn active" data-tab="notes">
-Заметки
-</button>
-
-<button class="nav-btn" data-tab="study">
-Учёба
-</button>
-
-<button class="nav-btn" data-tab="reminders">
-Напоминания
-</button>
-
-<button class="nav-btn" data-tab="personal">
-Личное
-</button>
-
-<button class="nav-btn" id="supportBtn">
-Поддержка
-</button>
-
+    <button class="nav-btn active" data-tab="notes">Заметки</button>
+    <button class="nav-btn" data-tab="study">Учёба</button>
+    <button class="nav-btn" data-tab="reminders">Напоминания</button>
+    <button class="nav-btn" data-tab="personal">Личное</button>
+    <button class="nav-btn" data-tab="support">Поддержка</button>
 </div>
 
 <div id="toast"></div>
 
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+    <div class="modal-box">
+        <h3 id="modalTitle">Редактировать</h3>
+        <input id="modalTitleInput" placeholder="Заголовок">
+        <div id="modalEditorWrap" style="display:none">
+            <div id="modalEditor"></div>
+        </div>
+        <input id="modalTextInput" placeholder="Текст" style="display:none">
+        <input type="date" id="modalDate" style="display:none">
+        <input type="time" id="modalTime" style="display:none">
+        <div class="modal-actions">
+            <button class="modal-cancel-btn" id="modalCancelBtn">Отмена</button>
+            <button class="modal-save-btn" id="modalSaveBtn">Сохранить</button>
+        </div>
+    </div>
+</div>
+
 <script>
-
 const tg = window.Telegram?.WebApp;
-
-const STORAGE_KEY = 'mrowsbot_v6';
+const STORAGE_KEY = 'mrowsbot_v7';
 
 const motivations = [
-
 "Даже 15 минут учебы — уже победа.",
 "СДВГ не делает тебя слабым.",
 "Ты не обязан быть идеальным.",
@@ -635,649 +669,370 @@ const motivations = [
 "Сделай это ради себя будущего.",
 "Даже гении уставали.",
 "Просто начни."
-
 ];
 
-let state =
-    JSON.parse(
-        localStorage.getItem(STORAGE_KEY)
-    ) || {
-
-        notes:[],
-        studies:[],
-        reminders:[],
-        personal:[]
+let state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+    notes:[], studies:[], reminders:[], personal:[]
 };
 
 function saveState(){
-
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(state)
-    );
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
 function uid(){
-    return Date.now() +
-        Math.random().toString(16).slice(2);
+    return Date.now() + Math.random().toString(16).slice(2);
 }
 
 function showToast(text){
-
-    const toast =
-        document.getElementById('toast');
-
+    const toast = document.getElementById('toast');
     toast.textContent = text;
-
     toast.classList.add('show');
-
-    setTimeout(()=>{
-        toast.classList.remove('show');
-    },2500);
+    setTimeout(()=>toast.classList.remove('show'), 2500);
 }
 
 function switchTab(tab){
+    document.querySelectorAll('.tab-content').forEach(el=>{
+        el.classList.remove('active');
+    });
+    setTimeout(()=>{
+        document.getElementById(tab).classList.add('active');
+    }, 100);
+    document.querySelectorAll('.nav-btn').forEach(btn=>{
+        btn.classList.remove('active');
+    });
+    const activeBtn = document.querySelector(`[data-tab="${tab}"]`);
+    if(activeBtn) activeBtn.classList.add('active');
+}
 
-    const current =
-        document.querySelector(
-            '.tab-content.active'
-        );
+/* ── QUILL CONFIG ── */
+const quillConfig = {
+    theme:'snow',
+    modules:{
+        toolbar:[
+            [{header:[1,2,3,false]}],
+            ['bold','italic','underline','strike'],
+            [{size:['small',false,'large','huge']}],
+            [{list:'ordered'},{list:'bullet'}],
+            [{align:[]}],
+            ['blockquote','code-block'],
+            ['link','image'],
+            ['clean']
+        ]
+    }
+};
 
-    if(current){
-        current.classList.remove('active');
+/* ── FIREWORKS ── */
+const canvas = document.getElementById('fireworks-canvas');
+const ctx = canvas.getContext('2d');
+let fwParticles = [];
+let fwFrame = null;
+
+function resizeCanvas(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+
+function launchFireworks(){
+    resizeCanvas();
+    canvas.classList.add('active');
+    fwParticles = [];
+
+    const colors = ['#a78bfa','#60a5fa','#f472b6','#34d399','#fbbf24','#f87171'];
+
+    for(let i=0;i<12;i++){
+        const x = Math.random()*canvas.width;
+        const y = Math.random()*canvas.height*0.6;
+        const color = colors[Math.floor(Math.random()*colors.length)];
+        for(let j=0;j<50;j++){
+            const angle = (Math.PI*2/50)*j;
+            const speed = 2+Math.random()*4;
+            fwParticles.push({
+                x, y,
+                vx:Math.cos(angle)*speed,
+                vy:Math.sin(angle)*speed,
+                alpha:1,
+                color,
+                size:2+Math.random()*2
+            });
+        }
     }
 
+    if(fwFrame) cancelAnimationFrame(fwFrame);
+    animateFireworks();
+
     setTimeout(()=>{
+        canvas.classList.remove('active');
+        fwParticles = [];
+        if(fwFrame) cancelAnimationFrame(fwFrame);
+    }, 3500);
+}
 
-        document
-            .getElementById(tab)
-            .classList.add('active');
-
-    },250);
-
-    document
-        .querySelectorAll('.nav-btn')
-        .forEach(btn=>{
-            btn.classList.remove('active');
-        });
-
-    const activeBtn =
-        document.querySelector(
-            `[data-tab="${tab}"]`
-        );
-
-    if(activeBtn){
-        activeBtn.classList.add('active');
+function animateFireworks(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    fwParticles = fwParticles.filter(p=>p.alpha>0.02);
+    fwParticles.forEach(p=>{
+        ctx.save();
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = p.color;
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+        ctx.fill();
+        ctx.restore();
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.07;
+        p.vx *= 0.98;
+        p.alpha -= 0.018;
+    });
+    if(fwParticles.length > 0){
+        fwFrame = requestAnimationFrame(animateFireworks);
     }
 }
 
-function createCard(item,type){
+/* ── MODAL EDITOR ── */
+let modalQuill = null;
+let modalCallback = null;
 
-    const card =
-        document.createElement('div');
+function openEditModal(config){
+    const modal = document.getElementById('editModal');
+    document.getElementById('modalTitle').textContent = config.title || 'Редактировать';
+    document.getElementById('modalTitleInput').value = config.titleVal || '';
 
-    card.className =
-        'item-card fade-in';
+    const editorWrap = document.getElementById('modalEditorWrap');
+    const textInput = document.getElementById('modalTextInput');
+    const dateInput = document.getElementById('modalDate');
+    const timeInput = document.getElementById('modalTime');
 
-    let extra='';
+    editorWrap.style.display = 'none';
+    textInput.style.display = 'none';
+    dateInput.style.display = 'none';
+    timeInput.style.display = 'none';
 
-    if(type==='reminders'){
-
-        extra =
-        `
-        <div class="item-date">
-            ⏰ ${item.date} ${item.time}
-        </div>
-        `;
+    if(config.richText){
+        editorWrap.style.display = 'block';
+        if(!modalQuill){
+            modalQuill = new Quill('#modalEditor', quillConfig);
+        }
+        modalQuill.root.innerHTML = config.textVal || '';
+    } else {
+        textInput.style.display = 'block';
+        textInput.value = config.textVal || '';
     }
 
-    card.innerHTML =
+    if(config.showDate){
+        dateInput.style.display = 'block';
+        dateInput.value = config.dateVal || '';
+        timeInput.style.display = 'block';
+        timeInput.value = config.timeVal || '';
+    }
 
-    `
-    <div class="item-title">
-        ${item.title}
-    </div>
+    modalCallback = config.onSave;
+    modal.classList.add('open');
+}
 
-    <div class="item-text">
-        ${item.text}
-    </div>
+function closeEditModal(){
+    document.getElementById('editModal').classList.remove('open');
+    modalCallback = null;
+}
 
-    ${extra}
+/* ── CREATE CARD ── */
+function createCard(item, type){
+    const card = document.createElement('div');
+    card.className = 'item-card fade-in';
 
-    <div class="item-actions">
+    const isRich = (type==='studies' || type==='notes');
 
-        <button class="edit-btn">
-            ✏️ Изменить
-        </button>
+    let extra = '';
+    if(type==='reminders'){
+        extra = `<div class="item-date">⏰ ${item.date} ${item.time}</div>`;
+    }
 
-        <button class="delete-btn">
-            🗑 Удалить
-        </button>
-
-    </div>
+    card.innerHTML = `
+        <div class="item-title">${item.title}</div>
+        <div class="item-text">${item.text}</div>
+        ${extra}
+        <div class="item-actions">
+            <button class="edit-btn">✏️ Изменить</button>
+            <button class="delete-btn">🗑 Удалить</button>
+        </div>
     `;
 
-    card
-        .querySelector('.delete-btn')
-        .onclick = ()=>{
-
-        state[type] =
-            state[type]
-            .filter(x=>x.id!==item.id);
-
+    card.querySelector('.delete-btn').onclick = ()=>{
+        state[type] = state[type].filter(x=>x.id!==item.id);
         saveState();
-
         renderAll();
-
         showToast('Удалено');
     };
 
-    card
-        .querySelector('.edit-btn')
-        .onclick = ()=>{
-
-        const newTitle =
-            prompt(
-                'Изменить заголовок:',
-                item.title
-            );
-
-        if(newTitle===null) return;
-
-        const newText =
-            prompt(
-                'Изменить текст:',
-                item.text
-            );
-
-        if(newText===null) return;
-
-        item.title = newTitle;
-        item.text = newText;
-
-        if(type==='reminders'){
-
-            const newDate =
-                prompt(
-                    'Новая дата:',
-                    item.date
-                );
-
-            if(newDate!==null){
-                item.date = newDate;
+    card.querySelector('.edit-btn').onclick = ()=>{
+        openEditModal({
+            title: 'Редактировать',
+            titleVal: item.title,
+            textVal: item.text,
+            richText: isRich,
+            showDate: type==='reminders',
+            dateVal: item.date,
+            timeVal: item.time,
+            onSave: (newTitle, newText, newDate, newTime)=>{
+                item.title = newTitle;
+                item.text = newText;
+                if(type==='reminders'){
+                    item.date = newDate;
+                    item.time = newTime;
+                }
+                saveState();
+                renderAll();
+                showToast('Изменено');
             }
-
-            const newTime =
-                prompt(
-                    'Новое время:',
-                    item.time
-                );
-
-            if(newTime!==null){
-                item.time = newTime;
-            }
-        }
-
-        saveState();
-
-        renderAll();
-
-        showToast('Изменено');
+        });
     };
 
     return card;
 }
 
-function renderSection(type,id){
-
-    const container =
-        document.getElementById(id);
-
-    container.innerHTML='';
-
+function renderSection(type, id){
+    const container = document.getElementById(id);
+    container.innerHTML = '';
     if(state[type].length===0){
-
-        container.innerHTML =
-
-        `
-        <div class="empty-card">
-            Пока пусто
-        </div>
-        `;
-
+        container.innerHTML = '<div class="empty-card">Пока пусто</div>';
         return;
     }
-
     state[type].forEach(item=>{
-
-        container.appendChild(
-            createCard(item,type)
-        );
+        container.appendChild(createCard(item,type));
     });
 }
 
 function renderAll(){
-
-    renderSection(
-        'notes',
-        'notesList'
-    );
-
-    renderSection(
-        'studies',
-        'studyList'
-    );
-
-    renderSection(
-        'reminders',
-        'reminderList'
-    );
-
-    renderSection(
-        'personal',
-        'personalList'
-    );
-}
-
-function addSimpleItem(
-    type,
-    titleId,
-    textId
-){
-
-    const title =
-        document
-        .getElementById(titleId)
-        .value
-        .trim();
-
-    const text =
-        document
-        .getElementById(textId)
-        .value
-        .trim();
-
-    if(!title || !text){
-
-        showToast(
-            'Заполни поля'
-        );
-
-        return;
-    }
-
-    state[type].push({
-
-        id:uid(),
-
-        title,
-        text
-    });
-
-    saveState();
-
-    renderAll();
-
-    document
-        .getElementById(titleId)
-        .value='';
-
-    document
-        .getElementById(textId)
-        .value='';
-
-    showToast('Сохранено');
+    renderSection('notes','notesList');
+    renderSection('studies','studyList');
+    renderSection('reminders','reminderList');
+    renderSection('personal','personalList');
 }
 
 function addReminder(){
-
-    const title =
-        document
-        .getElementById(
-            'reminderTitle'
-        )
-        .value
-        .trim();
-
-    const text =
-        document
-        .getElementById(
-            'reminderText'
-        )
-        .value
-        .trim();
-
-    const date =
-        document
-        .getElementById(
-            'reminderDate'
-        )
-        .value;
-
-    const time =
-        document
-        .getElementById(
-            'reminderTime'
-        )
-        .value;
-
-    if(
-        !title ||
-        !text ||
-        !date ||
-        !time
-    ){
-
-        showToast(
-            'Заполни поля'
-        );
-
-        return;
-    }
-
-    state.reminders.push({
-
-        id:uid(),
-
-        title,
-        text,
-        date,
-        time,
-
-        notified:false
-    });
-
+    const title = document.getElementById('reminderTitle').value.trim();
+    const text  = document.getElementById('reminderText').value.trim();
+    const date  = document.getElementById('reminderDate').value;
+    const time  = document.getElementById('reminderTime').value;
+    if(!title||!text||!date||!time){ showToast('Заполни поля'); return; }
+    state.reminders.push({ id:uid(), title, text, date, time, notified:false });
     saveState();
-
     renderAll();
-
-    showToast(
-        'Напоминание создано'
-    );
+    document.getElementById('reminderTitle').value='';
+    document.getElementById('reminderText').value='';
+    document.getElementById('reminderDate').value='';
+    document.getElementById('reminderTime').value='';
+    showToast('Напоминание создано');
 }
 
 function checkReminders(){
-
     const now = new Date();
-
     state.reminders.forEach(r=>{
-
         if(r.notified) return;
-
-        const reminderDate =
-            new Date(
-                `${r.date}T${r.time}`
-            );
-
-        if(now >= reminderDate){
-
+        const rd = new Date(`${r.date}T${r.time}`);
+        if(now >= rd){
             r.notified = true;
-
-            showToast(
-                `🔔 ${r.title}`
-            );
-
-            if(tg?.showAlert){
-
-                tg.showAlert(
-                    `${r.title}\n\n${r.text}`
-                );
+            showToast(`🔔 ${r.title}`);
+            launchFireworks();
+            if(tg?.showAlert) tg.showAlert(`${r.title}\n\n${r.text}`);
+            if(Notification.permission==='granted'){
+                new Notification(r.title,{body:r.text,icon:'logo.png'});
             }
-
-            if(
-                Notification.permission
-                ===
-                'granted'
-            ){
-
-                new Notification(
-                    r.title,
-                    {
-                        body:r.text,
-                        icon:'logo.png'
-                    }
-                );
-            }
-
             saveState();
         }
     });
 }
 
-document
-.addEventListener(
-'DOMContentLoaded',
-()=>{
+document.addEventListener('DOMContentLoaded', ()=>{
+    if(tg){ tg.ready(); tg.expand(); tg.setHeaderColor('#17192f'); }
+    if("Notification" in window) Notification.requestPermission();
 
-    if(tg){
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
 
-        tg.ready();
+    // Study editor
+    const studyEditor = new Quill('#studyEditor', quillConfig);
 
-        tg.expand();
+    // Note editor
+    const noteEditor = new Quill('#noteEditor', quillConfig);
 
-        tg.setHeaderColor(
-            '#17192f'
-        );
-    }
-
-    if("Notification" in window){
-
-        Notification
-        .requestPermission();
-    }
-
-    const studyEditor =
-        new Quill(
-            '#studyEditor',
-            {
-
-            theme:'snow',
-
-            modules:{
-
-                toolbar:[
-
-                    [
-                        {
-                            header:
-                            [1,2,3,false]
-                        }
-                    ],
-
-                    [
-                        'bold',
-                        'italic',
-                        'underline',
-                        'strike'
-                    ],
-
-                    [
-                        {
-                            size:[
-                                'small',
-                                false,
-                                'large',
-                                'huge'
-                            ]
-                        }
-                    ],
-
-                    [
-                        {
-                            list:'ordered'
-                        },
-                        {
-                            list:'bullet'
-                        }
-                    ],
-
-                    [
-                        {
-                            align:[]
-                        }
-                    ],
-
-                    [
-                        'blockquote',
-                        'code-block'
-                    ],
-
-                    [
-                        'link',
-                        'image'
-                    ],
-
-                    [
-                        'clean'
-                    ]
-                ]
-            }
-        });
-
-    document
-        .getElementById(
-            'motivationText'
-        )
-        .textContent =
-
-        motivations[
-            Math.floor(
-                Math.random()
-                *
-                motivations.length
-            )
-        ];
+    document.getElementById('motivationText').textContent =
+        motivations[Math.floor(Math.random()*motivations.length)];
 
     renderAll();
+    setInterval(checkReminders, 15000);
 
-    setInterval(
-        checkReminders,
-        15000
-    );
-
-    document
-        .querySelectorAll('.nav-btn')
-        .forEach(btn=>{
-
+    // Nav
+    document.querySelectorAll('.nav-btn').forEach(btn=>{
         btn.onclick = ()=>{
-
-            if(btn.dataset.tab){
-
-                switchTab(
-                    btn.dataset.tab
-                );
-            }
+            if(btn.dataset.tab) switchTab(btn.dataset.tab);
         };
     });
 
-    document
-        .getElementById(
-            'addNoteBtn'
-        )
-        .onclick = ()=>{
-
-        addSimpleItem(
-            'notes',
-            'noteTitle',
-            'noteText'
-        );
+    // Add note
+    document.getElementById('addNoteBtn').onclick = ()=>{
+        const title = document.getElementById('noteTitle').value.trim();
+        const text  = noteEditor.root.innerHTML;
+        if(!title || text==='<p><br></p>'){ showToast('Заполни поля'); return; }
+        state.notes.push({ id:uid(), title, text });
+        saveState(); renderAll();
+        document.getElementById('noteTitle').value='';
+        noteEditor.root.innerHTML='';
+        showToast('Сохранено');
     };
 
-    document
-        .getElementById(
-            'addPersonalBtn'
-        )
-        .onclick = ()=>{
-
-        addSimpleItem(
-            'personal',
-            'personalTitle',
-            'personalText'
-        );
+    // Add personal
+    document.getElementById('addPersonalBtn').onclick = ()=>{
+        const title = document.getElementById('personalTitle').value.trim();
+        const text  = document.getElementById('personalText').value.trim();
+        if(!title||!text){ showToast('Заполни поля'); return; }
+        state.personal.push({ id:uid(), title, text });
+        saveState(); renderAll();
+        document.getElementById('personalTitle').value='';
+        document.getElementById('personalText').value='';
+        showToast('Сохранено');
     };
 
-    document
-        .getElementById(
-            'addReminderBtn'
-        )
-        .onclick = addReminder;
+    // Add reminder
+    document.getElementById('addReminderBtn').onclick = addReminder;
 
-    document
-        .getElementById(
-            'addStudyBtn'
-        )
-        .onclick = ()=>{
+    // Add study
+    document.getElementById('addStudyBtn').onclick = ()=>{
+        const title = document.getElementById('studyTitle').value.trim();
+        const text  = studyEditor.root.innerHTML;
+        if(!title || text==='<p><br></p>'){ showToast('Заполни поля'); return; }
+        state.studies.push({ id:uid(), title, text });
+        saveState(); renderAll();
+        document.getElementById('studyTitle').value='';
+        studyEditor.root.innerHTML='';
+        showToast('Учебная запись сохранена');
+    };
 
-        const title =
-            document
-            .getElementById(
-                'studyTitle'
-            )
-            .value
-            .trim();
-
-        const text =
-            studyEditor
-            .root
-            .innerHTML;
-
-        if(
-            !title ||
-            text === '<p><br></p>'
-        ){
-
-            showToast(
-                'Заполни поля'
-            );
-
-            return;
+    // Modal save
+    document.getElementById('modalSaveBtn').onclick = ()=>{
+        if(!modalCallback) return;
+        const newTitle = document.getElementById('modalTitleInput').value.trim();
+        let newText;
+        if(document.getElementById('modalEditorWrap').style.display!=='none' && modalQuill){
+            newText = modalQuill.root.innerHTML;
+        } else {
+            newText = document.getElementById('modalTextInput').value.trim();
         }
-
-        state.studies.push({
-
-            id:uid(),
-
-            title,
-            text
-        });
-
-        saveState();
-
-        renderAll();
-
-        document
-            .getElementById(
-                'studyTitle'
-            )
-            .value='';
-
-        studyEditor
-            .root
-            .innerHTML='';
-
-        showToast(
-            'Учебная запись сохранена'
-        );
+        const newDate = document.getElementById('modalDate').value;
+        const newTime = document.getElementById('modalTime').value;
+        if(!newTitle){ showToast('Заполни заголовок'); return; }
+        modalCallback(newTitle, newText, newDate, newTime);
+        closeEditModal();
     };
 
-    document
-        .getElementById(
-            'supportBtn'
-        )
-        .onclick = ()=>{
+    document.getElementById('modalCancelBtn').onclick = closeEditModal;
 
-        alert(
-
-`Техническая поддержка
-
-@dmcpavel
-
-Сообщить о багах`
-        );
-    };
-
+    document.getElementById('editModal').addEventListener('click', (e)=>{
+        if(e.target===document.getElementById('editModal')) closeEditModal();
+    });
 });
-
 </script>
 </body>
 </html>
