@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MrowsBot</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+
+:root{
+    --bg1:#0d1026;
+    --bg2:#18163b;
+
+    --card:#232544;
+
+    --accent:#8b5cf6;
+    --accent2:#b06cff;
+
+    --text:#ffffff;
+    --muted:#b7b9d6;
+
+    --danger:#ff5f7a;
+
+    --radius:24px;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,sans-serif;
+}
+
+body{
+    background:
+        linear-gradient(
+            180deg,
+            var(--bg1),
+            #15173a 60%,
+            #10142c
+        );
+
+    color:var(--text);
+
+    min-height:100vh;
+
+    padding:18px 14px 120px;
+
+    overflow-x:hidden;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin-bottom:24px;
+
+    animation:fadeIn 1s ease;
+}
+
+/* =========================
+   LOGO
+========================= */
+
+.logo-wrapper{
+    position:relative;
+
+    width:82px;
+    height:82px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.logo{
+    width:78px;
+    height:78px;
+
+    border-radius:24px;
+
+    object-fit:cover;
+
+    position:relative;
+    z-index:2;
+
+    animation:floatLogo 4s ease-in-out infinite;
+
+    box-shadow:
+        0 0 25px rgba(139,92,246,.45),
+        0 0 60px rgba(176,108,255,.25);
+
+    transition:.4s;
+}
+
+.logo:hover{
+    transform:scale(1.06);
+}
+
+.logo-glow{
+    position:absolute;
+
+    width:92px;
+    height:92px;
+
+    border-radius:28px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(139,92,246,.4),
+            transparent 70%
+        );
+
+    animation:pulseGlow 3s infinite ease-in-out;
+}
+
+@keyframes floatLogo{
+
+    0%{
+        transform:translateY(0px);
+    }
+
+    50%{
+        transform:translateY(-8px);
+    }
+
+    100%{
+        transform:translateY(0px);
+    }
+
+}
+
+@keyframes pulseGlow{
+
+    0%{
+        opacity:.6;
+        transform:scale(1);
+    }
+
+    50%{
+        opacity:1;
+        transform:scale(1.08);
+    }
+
+    100%{
+        opacity:.6;
+        transform:scale(1);
+    }
+
+}
+
+/* =========================
+   TITLES
+========================= */
+
+h1{
+    font-size:42px;
+    font-weight:800;
+
+    animation:titleFade 1s ease;
+}
+
+.subtitle{
+    color:var(--muted);
+    margin-top:6px;
+}
+
+@keyframes titleFade{
+
+    from{
+        opacity:0;
+        transform:translateY(10px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0px);
+    }
+
+}
+
+/* =========================
+   SECTIONS
+========================= */
+
+.section{
+
+    background:
+        rgba(255,255,255,.05);
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    border-radius:var(--radius);
+
+    padding:18px;
+
+    margin-bottom:18px;
+
+    backdrop-filter:blur(14px);
+
+    animation:pageFade .45s ease;
+}
+
+.section-title{
+    font-size:22px;
+    font-weight:700;
+    margin-bottom:16px;
+}
+
+/* =========================
+   INPUTS
+========================= */
+
+input,
+textarea{
+
+    width:100%;
+
+    background:
+        rgba(255,255,255,.07);
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    color:white;
+
+    border-radius:18px;
+
+    padding:14px;
+
+    margin-bottom:12px;
+
+    outline:none;
+
+    font-size:15px;
+
+    transition:.3s;
+}
+
+input:focus,
+textarea:focus{
+
+    border:
+        1px solid rgba(176,108,255,.7);
+
+    box-shadow:
+        0 0 20px rgba(139,92,246,.2);
+}
+
+textarea{
+    resize:none;
+    min-height:120px;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+button{
+
+    border:none;
+
+    border-radius:18px;
+
+    padding:14px;
+
+    width:100%;
+
+    color:white;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:
+        transform .25s ease,
+        opacity .25s ease,
+        box-shadow .25s ease;
+}
+
+button:hover{
+
+    transform:
+        translateY(-2px)
+        scale(1.01);
+
+    box-shadow:
+        0 12px 24px rgba(139,92,246,.25);
+}
+
+button:active{
+    transform:scale(.98);
+}
+
+.primary-btn{
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--accent),
+            var(--accent2)
+        );
+}
+
+.secondary-btn{
+
+    background:#43486d;
+
+    margin-top:10px;
+}
+
+.delete-btn{
+
+    background:
+        rgba(255,95,122,.18);
+
+    color:#ff9cb1;
+
+    margin-top:10px;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.card{
+
+    background:
+        rgba(255,255,255,.05);
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    border-radius:22px;
+
+    padding:16px;
+
+    margin-top:14px;
+
+    transition:.35s;
+}
+
+.card:hover{
+
+    transform:translateY(-4px);
+
+    border:
+        1px solid rgba(176,108,255,.35);
+
+    background:
+        rgba(255,255,255,.07);
+}
+
+.card h3{
+    margin-bottom:8px;
+}
+
+.card p{
+    color:var(--muted);
+    white-space:pre-wrap;
+}
+
+/* =========================
+   NAVIGATION
+========================= */
+
+.bottom-nav{
+
+    position:fixed;
+
+    bottom:0;
+    left:0;
+
+    width:100%;
+
+    display:flex;
+
+    gap:10px;
+
+    padding:12px;
+
+    background:
+        rgba(10,11,20,.96);
+
+    backdrop-filter:blur(18px);
+}
+
+.nav-btn{
+
+    flex:1;
+
+    background:#232741;
+
+    color:#c8cae7;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.nav-btn.active{
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--accent),
+            var(--accent2)
+        );
+
+    color:white;
+}
+
+.nav-btn::before{
+
+    content:'';
+
+    position:absolute;
+
+    top:0;
+    left:-120%;
+
+    width:100%;
+    height:100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.16),
+            transparent
+        );
+
+    transition:.6s;
+}
+
+.nav-btn:hover::before{
+    left:120%;
+}
+
+/* =========================
+   PAGE
+========================= */
+
+.page{
+    animation:pageFade .4s ease;
+}
+
+.hidden{
+    display:none;
+}
+
+@keyframes pageFade{
+
+    from{
+        opacity:0;
+        transform:translateY(10px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0px);
+    }
+
+}
+
+@keyframes fadeIn{
+
+    from{
+        opacity:0;
+        transform:translateY(14px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0px);
+    }
+
+}
+
+.empty{
+    text-align:center;
+    color:var(--muted);
+    padding:14px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<div class="header">
+
+    <div class="logo-wrapper">
+
+        <img
+            class="logo"
+            src="logo.png"
+        >
+
+        <div class="logo-glow"></div>
+
+    </div>
+
+    <div>
+
+        <h1>MrowsBot</h1>
+
+        <div class="subtitle">
+            Твой личный помощник и дневник
+        </div>
+
+    </div>
+
+</div>
+
+<!-- NOTES -->
+
+<div id="notesPage" class="page">
+
+    <div class="section">
+
+        <div class="section-title">
+            📝 Добавить заметку
+        </div>
+
+        <input
+            id="noteTitle"
+            type="text"
+            placeholder="Название заметки"
+        >
+
+        <textarea
+            id="noteText"
+            placeholder="Текст заметки..."
+        ></textarea>
+
+        <button
+            class="primary-btn"
+            onclick="saveNote()"
+        >
+            Сохранить
+        </button>
+
+    </div>
+
+    <div class="section">
+
+        <div class="section-title">
+            📚 Все заметки
+        </div>
+
+        <div id="notesList"></div>
+
+    </div>
+
+</div>
+
+<!-- STUDY -->
+
+<div id="studyPage" class="page hidden">
+
+    <div class="section">
+
+        <div class="section-title">
+            📖 Добавить учебную запись
+        </div>
+
+        <input
+            id="studyTitle"
+            type="text"
+            placeholder="Тема / предмет"
+        >
+
+        <textarea
+            id="studyText"
+            placeholder="Конспект или материал..."
+        ></textarea>
+
+        <button
+            class="primary-btn"
+            onclick="saveStudy()"
+        >
+            Сохранить
+        </button>
+
+    </div>
+
+    <div class="section">
+
+        <div class="section-title">
+            🎓 Учёба
+        </div>
+
+        <div id="studyList"></div>
+
+    </div>
+
+</div>
+
+<!-- REMINDERS -->
+
+<div id="remindersPage" class="page hidden">
+
+    <div class="section">
+
+        <div class="section-title">
+            ⏰ Создать напоминание
+        </div>
+
+        <input
+            id="reminderTitle"
+            type="text"
+            placeholder="Название напоминания"
+        >
+
+        <input
+            id="reminderDate"
+            type="datetime-local"
+        >
+
+        <button
+            class="primary-btn"
+            onclick="saveReminder()"
+        >
+            Добавить
+        </button>
+
+    </div>
+
+    <div class="section">
+
+        <div class="section-title">
+            🔔 Напоминания
+        </div>
+
+        <div id="remindersList"></div>
+
+    </div>
+
+</div>
+
+<!-- PERSONAL -->
+
+<div id="personalPage" class="page hidden">
+
+    <div class="section">
+
+        <div class="section-title">
+            👤 Личное
+        </div>
+
+        <textarea
+            id="personalText"
+            placeholder="Твои мысли, цели, идеи..."
+        ></textarea>
+
+        <button
+            class="primary-btn"
+            onclick="savePersonal()"
+        >
+            Сохранить
+        </button>
+
+    </div>
+
+</div>
+
+<!-- NAVIGATION -->
+
+<div class="bottom-nav">
+
+    <button
+        class="nav-btn active"
+        onclick="switchPage('notesPage',this)"
+    >
+        Заметки
+    </button>
+
+    <button
+        class="nav-btn"
+        onclick="switchPage('studyPage',this)"
+    >
+        Учёба
+    </button>
+
+    <button
+        class="nav-btn"
+        onclick="switchPage('remindersPage',this)"
+    >
+        Напоминания
+    </button>
+
+    <button
+        class="nav-btn"
+        onclick="switchPage('personalPage',this)"
+    >
+        Личное
+    </button>
+
+</div>
+
+<script>
+
+/* =========================
+   TELEGRAM
+========================= */
+
+if(window.Telegram && Telegram.WebApp){
+
+    Telegram.WebApp.ready();
+    Telegram.WebApp.expand();
+}
+
+/* =========================
+   STORAGE
+========================= */
+
+let notes =
+    JSON.parse(
+        localStorage.getItem('notes') || '[]'
+    );
+
+let study =
+    JSON.parse(
+        localStorage.getItem('study') || '[]'
+    );
+
+let reminders =
+    JSON.parse(
+        localStorage.getItem('reminders') || '[]'
+    );
+
+/* =========================
+   PAGE SWITCH
+========================= */
+
+function switchPage(pageId,btn){
+
+    document
+        .querySelectorAll('.page')
+        .forEach(page=>{
+            page.classList.add('hidden');
+        });
+
+    document
+        .getElementById(pageId)
+        .classList.remove('hidden');
+
+    document
+        .querySelectorAll('.nav-btn')
+        .forEach(b=>{
+            b.classList.remove('active');
+        });
+
+    btn.classList.add('active');
+}
+
+/* =========================
+   NOTES
+========================= */
+
+function saveNote(){
+
+    const title =
+        document
+            .getElementById('noteTitle')
+            .value
+            .trim();
+
+    const text =
+        document
+            .getElementById('noteText')
+            .value
+            .trim();
+
+    if(!title || !text){
+
+        alert('Заполни все поля');
+        return;
+    }
+
+    notes.unshift({
+
+        id:Date.now(),
+        title,
+        text
+    });
+
+    localStorage.setItem(
+        'notes',
+        JSON.stringify(notes)
+    );
+
+    document.getElementById('noteTitle').value='';
+    document.getElementById('noteText').value='';
+
+    renderNotes();
+}
+
+function renderNotes(){
+
+    const container =
+        document.getElementById('notesList');
+
+    if(notes.length===0){
+
+        container.innerHTML=
+            '<div class=\"empty\">Заметок пока нет</div>';
+
+        return;
+    }
+
+    container.innerHTML='';
+
+    notes.forEach(item=>{
+
+        container.innerHTML += `
+
+        <div class="card">
+
+            <h3>${item.title}</h3>
+
+            <p>${item.text}</p>
+
+            <button
+                class="secondary-btn"
+                onclick="editNote(${item.id})"
+            >
+                Редактировать
+            </button>
+
+            <button
+                class="delete-btn"
+                onclick="deleteNote(${item.id})"
+            >
+                Удалить
+            </button>
+
+        </div>
+
+        `;
+    });
+}
+
+function editNote(id){
+
+    const item =
+        notes.find(n=>n.id===id);
+
+    const newTitle =
+        prompt(
+            'Новое название',
+            item.title
+        );
+
+    if(newTitle===null) return;
+
+    const newText =
+        prompt(
+            'Новый текст',
+            item.text
+        );
+
+    if(newText===null) return;
+
+    item.title = newTitle;
+    item.text = newText;
+
+    localStorage.setItem(
+        'notes',
+        JSON.stringify(notes)
+    );
+
+    renderNotes();
+}
+
+function deleteNote(id){
+
+    notes =
+        notes.filter(n=>n.id!==id);
+
+    localStorage.setItem(
+        'notes',
+        JSON.stringify(notes)
+    );
+
+    renderNotes();
+}
+
+/* =========================
+   STUDY
+========================= */
+
+function saveStudy(){
+
+    const title =
+        document
+            .getElementById('studyTitle')
+            .value
+            .trim();
+
+    const text =
+        document
+            .getElementById('studyText')
+            .value
+            .trim();
+
+    if(!title || !text){
+
+        alert('Заполни все поля');
+        return;
+    }
+
+    study.unshift({
+
+        id:Date.now(),
+        title,
+        text
+    });
+
+    localStorage.setItem(
+        'study',
+        JSON.stringify(study)
+    );
+
+    document.getElementById('studyTitle').value='';
+    document.getElementById('studyText').value='';
+
+    renderStudy();
+}
+
+function renderStudy(){
+
+    const container =
+        document.getElementById('studyList');
+
+    if(study.length===0){
+
+        container.innerHTML=
+            '<div class=\"empty\">Учебных записей пока нет</div>';
+
+        return;
+    }
+
+    container.innerHTML='';
+
+    study.forEach(item=>{
+
+        container.innerHTML += `
+
+        <div class="card">
+
+            <h3>${item.title}</h3>
+
+            <p>${item.text}</p>
+
+            <button
+                class="secondary-btn"
+                onclick="editStudy(${item.id})"
+            >
+                Редактировать
+            </button>
+
+            <button
+                class="delete-btn"
+                onclick="deleteStudy(${item.id})"
+            >
+                Удалить
+            </button>
+
+        </div>
+
+        `;
+    });
+}
+
+function editStudy(id){
+
+    const item =
+        study.find(n=>n.id===id);
+
+    const newTitle =
+        prompt(
+            'Новая тема',
+            item.title
+        );
+
+    if(newTitle===null) return;
+
+    const newText =
+        prompt(
+            'Новый материал',
+            item.text
+        );
+
+    if(newText===null) return;
+
+    item.title = newTitle;
+    item.text = newText;
+
+    localStorage.setItem(
+        'study',
+        JSON.stringify(study)
+    );
+
+    renderStudy();
+}
+
+function deleteStudy(id){
+
+    study =
+        study.filter(n=>n.id!==id);
+
+    localStorage.setItem(
+        'study',
+        JSON.stringify(study)
+    );
+
+    renderStudy();
+}
+
+/* =========================
+   REMINDERS
+========================= */
+
+function saveReminder(){
+
+    const title =
+        document
+            .getElementById('reminderTitle')
+            .value
+            .trim();
+
+    const date =
+        document
+            .getElementById('reminderDate')
+            .value;
+
+    if(!title || !date){
+
+        alert('Заполни все поля');
+        return;
+    }
+
+    reminders.unshift({
+
+        id:Date.now(),
+        title,
+        date
+    });
+
+    localStorage.setItem(
+        'reminders',
+        JSON.stringify(reminders)
+    );
+
+    document.getElementById('reminderTitle').value='';
+    document.getElementById('reminderDate').value='';
+
+    renderReminders();
+}
+
+function renderReminders(){
+
+    const container =
+        document.getElementById('remindersList');
+
+    if(reminders.length===0){
+
+        container.innerHTML=
+            '<div class=\"empty\">Напоминаний пока нет</div>';
+
+        return;
+    }
+
+    container.innerHTML='';
+
+    reminders.forEach(item=>{
+
+        container.innerHTML += `
+
+        <div class="card">
+
+            <h3>${item.title}</h3>
+
+            <p>
+                ${
+                    new Date(item.date)
+                    .toLocaleString('ru-RU')
+                }
+            </p>
+
+            <button
+                class="secondary-btn"
+                onclick="editReminder(${item.id})"
+            >
+                Редактировать
+            </button>
+
+            <button
+                class="delete-btn"
+                onclick="deleteReminder(${item.id})"
+            >
+                Удалить
+            </button>
+
+        </div>
+
+        `;
+    });
+}
+
+function editReminder(id){
+
+    const item =
+        reminders.find(r=>r.id===id);
+
+    const newTitle =
+        prompt(
+            'Новое название',
+            item.title
+        );
+
+    if(newTitle===null) return;
+
+    const newDate =
+        prompt(
+            'Новая дата YYYY-MM-DD HH:MM',
+            item.date.replace('T',' ')
+        );
+
+    if(newDate===null) return;
+
+    item.title = newTitle;
+
+    item.date =
+        newDate.replace(' ','T');
+
+    localStorage.setItem(
+        'reminders',
+        JSON.stringify(reminders)
+    );
+
+    renderReminders();
+}
+
+function deleteReminder(id){
+
+    reminders =
+        reminders.filter(r=>r.id!==id);
+
+    localStorage.setItem(
+        'reminders',
+        JSON.stringify(reminders)
+    );
+
+    renderReminders();
+}
+
+/* =========================
+   PERSONAL
+========================= */
+
+function savePersonal(){
+
+    const text =
+        document
+            .getElementById('personalText')
+            .value;
+
+    localStorage.setItem(
+        'personalText',
+        text
+    );
+
+    alert('Сохранено');
+}
+
+function loadPersonal(){
+
+    const saved =
+        localStorage.getItem('personalText') || '';
+
+    document.getElementById(
+        'personalText'
+    ).value = saved;
+}
+
+/* =========================
+   INIT
+========================= */
+
+renderNotes();
+renderStudy();
+renderReminders();
+loadPersonal();
+
+</script>
+
+</body>
+</html>
