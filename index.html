@@ -20,6 +20,12 @@
     --muted:#b7b9d6;
     --danger:#ff5f7a;
     --radius:24px;
+    
+    /* Цвета для статусов целей и неона */
+    --status-none: #8e8e93;
+    --status-process: #ff9500;
+    --status-completed: #34c759;
+    --status-failed: #ff3b30;
 }
 
 *{
@@ -172,15 +178,16 @@ button{
     right:0;
     bottom:0;
     display:flex;
-    gap:0;
-    padding:8px 8px 12px;
+    gap:4px;
+    padding:8px 12px 14px;
     background:rgba(12,13,32,.96);
     backdrop-filter:blur(20px);
     border-top:1px solid rgba(255,255,255,.07);
     z-index:999;
     overflow-x:auto;
-    -webkit-overflow-scrolling:touch;
-    scrollbar-width:none;
+    display: flex;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
 }
 
 .bottom-nav::-webkit-scrollbar{
@@ -189,7 +196,7 @@ button{
 
 .nav-btn{
     flex:0 0 auto;
-    min-width:64px;
+    min-width:75px;
     padding:10px 14px;
     border-radius:14px;
     color:rgba(255,255,255,.65);
@@ -284,6 +291,147 @@ button{
     font-size:clamp(13px,3.8vw,15px);
 }
 
+/* ── ЦЕЛИ И НЕОНОВАЯ ПОДСВЕТКА ── */
+.goal-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #313456;
+    border: 2px solid transparent;
+    border-radius: 20px;
+    padding: 16px;
+    margin-bottom: 14px;
+    transition: all 0.4s ease;
+}
+
+.goal-content-text {
+    font-size: clamp(14px, 4vw, 16px);
+    color: #ffffff;
+    flex: 1;
+    padding-right: 12px;
+    transition: all 0.4s ease;
+}
+
+.goal-status-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--status-none);
+    background: transparent;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.4s ease;
+}
+
+.goal-card[data-status="in_progress"] {
+    border-color: var(--status-process);
+    box-shadow: 0 0 15px rgba(255, 149, 0, 0.4);
+}
+.goal-card[data-status="in_progress"] .goal-status-btn {
+    background: var(--status-process);
+    border-color: var(--status-process);
+    box-shadow: 0 0 10px var(--status-process);
+}
+.goal-card[data-status="in_progress"] .goal-content-text {
+    color: #ffe0b3;
+    text-shadow: 0 0 5px rgba(255, 149, 0, 0.5);
+}
+
+.goal-card[data-status="completed"] {
+    border-color: var(--status-completed);
+    box-shadow: 0 0 15px rgba(52, 199, 89, 0.4);
+}
+.goal-card[data-status="completed"] .goal-status-btn {
+    background: var(--status-completed);
+    border-color: var(--status-completed);
+    box-shadow: 0 0 10px var(--status-completed);
+}
+.goal-card[data-status="completed"] .goal-content-text {
+    color: #d1f7d9;
+    text-shadow: 0 0 5px rgba(52, 199, 89, 0.5);
+}
+
+.goal-card[data-status="failed"] {
+    border-color: var(--status-failed);
+    box-shadow: 0 0 15px rgba(255, 59, 48, 0.4);
+}
+.goal-card[data-status="failed"] .goal-status-btn {
+    background: var(--status-failed);
+    border-color: var(--status-failed);
+    box-shadow: 0 0 10px var(--status-failed);
+}
+.goal-card[data-status="failed"] .goal-content-text {
+    color: #ffd1d1;
+    text-shadow: 0 0 5px rgba(255, 59, 48, 0.5);
+}
+
+/* ── ЦЕНТРИРОВАНИЕ И АНИМАЦИИ КАРТИНОК ── */
+.tab-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.tab-image-container img {
+    max-width: 150px;
+    max-height: 150px;
+    object-fit: contain;
+}
+
+/* Заметки: Плавная левитация */
+.notes-float {
+    animation: notesFloatAnim 3s ease-in-out infinite alternate;
+}
+@keyframes notesFloatAnim {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-10px); }
+}
+
+/* Цели: Легкое подпрыгивание */
+.goals-bounce {
+    animation: goalsBounceAnim 2s cubic-bezier(0.28, 0.84, 0.42, 1) infinite;
+}
+@keyframes goalsBounceAnim {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-12px) scale(1.05); }
+}
+
+/* Будильник: Звонок (ИСПРАВЛЕНО) */
+.alarm-vibrate {
+    animation: alarmRing 0.8s ease-in-out infinite;
+    transform-origin: bottom center;
+}
+@keyframes alarmRing {
+    0% { transform: rotate(0) scale(1); }
+    15% { transform: rotate(-15deg) scale(1.1); }
+    30% { transform: rotate(15deg) scale(1.1); }
+    45% { transform: rotate(-15deg) scale(1.1); }
+    60% { transform: rotate(15deg) scale(1.1); }
+    75% { transform: rotate(-15deg) scale(1.1); }
+    100% { transform: rotate(0) scale(1); }
+}
+
+/* Учеба: Покачивание */
+.cat-sway {
+    animation: catSwayAnim 2.5s ease-in-out infinite alternate;
+    transform-origin: bottom center;
+}
+@keyframes catSwayAnim {
+    0% { transform: rotate(-10deg); }
+    100% { transform: rotate(10deg); }
+}
+
+/* Секретики: Пульсация */
+.secret-pulse {
+    animation: secretPulseAnim 2s ease-in-out infinite alternate;
+}
+@keyframes secretPulseAnim {
+    0% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(176,108,255,0.2)); }
+    100% { transform: scale(1.1); filter: drop-shadow(0 0 20px rgba(176,108,255,0.6)); }
+}
+
 /* ── QUILL ── */
 .ql-toolbar{
     border:none !important;
@@ -336,7 +484,7 @@ button{
     font-size:14px;
 }
 
-/* ── EDIT MODAL ── */
+/* ── MODALS ── */
 .modal-overlay{
     position:fixed;
     inset:0;
@@ -378,10 +526,6 @@ button{
     margin-bottom:4px;
 }
 
-.modal-box input{
-    margin-bottom:0;
-}
-
 .modal-actions{
     display:flex;
     gap:10px;
@@ -406,6 +550,33 @@ button{
     font-weight:600;
     font-size:15px;
     background:#3a3d60;
+}
+
+/* Стили для выбора статуса целей */
+.status-option {
+    display: flex;
+    align-items: center;
+    padding: 14px;
+    background: #2a2d4d;
+    border-radius: 14px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.status-option:active {
+    transform: scale(0.98);
+    background: #313456;
+}
+
+.status-option-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    margin-right: 14px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
 
 /* ── SUPPORT ── */
@@ -536,8 +707,10 @@ button{
 
 <div class="main-content">
 
-<!-- NOTES -->
 <div class="tab-content active" id="notes">
+    <div class="tab-image-container">
+        <img src="zametkincat.png" class="notes-float" alt="Заметки">
+    </div>
     <div class="card">
         <h2>📝 Добавить заметку</h2>
         <input id="noteTitle" placeholder="Название">
@@ -548,8 +721,22 @@ button{
     <div id="notesList"></div>
 </div>
 
-<!-- STUDY -->
+<div class="tab-content" id="goals">
+    <div class="tab-image-container">
+        <img src="goalscat.png" class="goals-bounce" alt="Цели">
+    </div>
+    <div class="card">
+        <h2>🎯 Добавить цель</h2>
+        <input id="goalInput" placeholder="Какую цель ты хочешь выполнить?">
+        <button class="primary-btn" id="addGoalBtn">Добавить цель</button>
+    </div>
+    <div id="goalsList"></div>
+</div>
+
 <div class="tab-content" id="study">
+    <div class="tab-image-container">
+        <img src="uchitelcat.png" class="cat-sway" alt="Учительница">
+    </div>
     <div class="motivation-box" id="motivationText"></div>
     <div class="card">
         <h2>📚 Учебная запись</h2>
@@ -561,8 +748,10 @@ button{
     <div id="studyList"></div>
 </div>
 
-<!-- REMINDERS -->
 <div class="tab-content" id="reminders">
+    <div class="tab-image-container" id="alarmImageWrapper">
+        <img src="napominalka.png" class="alarm-vibrate" alt="Будильник">
+    </div>
     <div class="card">
         <h2>⏰ Напоминание</h2>
         <input id="reminderTitle" placeholder="Название">
@@ -574,8 +763,10 @@ button{
     <div id="reminderList"></div>
 </div>
 
-<!-- PERSONAL -->
 <div class="tab-content" id="personal">
+    <div class="tab-image-container">
+        <img src="secretiki.png" class="secret-pulse" alt="Секреты">
+    </div>
     <div class="card">
         <h2>🌙 Личное</h2>
         <input id="personalTitle" placeholder="Заголовок">
@@ -585,7 +776,6 @@ button{
     <div id="personalList"></div>
 </div>
 
-<!-- SUPPORT -->
 <div class="tab-content" id="support">
     <div class="support-img-wrap">
         <img src="supportagent.png" alt="Поддержка">
@@ -612,12 +802,9 @@ button{
     <div class="support-badge">Обычно отвечаем в течение дня</div>
 </div>
 
-</div><!-- /main-content -->
-</div><!-- /app -->
-
-<!-- BOTTOM NAV -->
-<div class="bottom-nav">
+</div></div><div class="bottom-nav">
     <button class="nav-btn active" data-tab="notes">Заметки</button>
+    <button class="nav-btn" data-tab="goals">Цели</button>
     <button class="nav-btn" data-tab="study">Учёба</button>
     <button class="nav-btn" data-tab="reminders">Напоминания</button>
     <button class="nav-btn" data-tab="personal">Личное</button>
@@ -626,17 +813,16 @@ button{
 
 <div id="toast"></div>
 
-<!-- EDIT MODAL -->
 <div class="modal-overlay" id="editModal">
     <div class="modal-box">
         <h3 id="modalTitle">Редактировать</h3>
-        <input id="modalTitleInput" placeholder="Заголовок">
-        <div id="modalEditorWrap" style="display:none">
+        <input id="modalTitleInput" placeholder="Заголовок" style="margin-bottom:12px;">
+        <div id="modalEditorWrap" style="display:none; margin-bottom:12px;">
             <div id="modalEditor"></div>
         </div>
-        <input id="modalTextInput" placeholder="Текст" style="display:none">
-        <input type="date" id="modalDate" style="display:none">
-        <input type="time" id="modalTime" style="display:none">
+        <input id="modalTextInput" placeholder="Текст" style="display:none; margin-bottom:12px;">
+        <input type="date" id="modalDate" style="display:none; margin-bottom:12px;">
+        <input type="time" id="modalTime" style="display:none; margin-bottom:12px;">
         <div class="modal-actions">
             <button class="modal-cancel-btn" id="modalCancelBtn">Отмена</button>
             <button class="modal-save-btn" id="modalSaveBtn">Сохранить</button>
@@ -644,9 +830,37 @@ button{
     </div>
 </div>
 
+<div class="modal-overlay" id="statusModal">
+    <div class="modal-box">
+        <h3 style="margin-bottom: 16px; text-align: center;">Выберите статус цели</h3>
+        
+        <div class="status-option" onclick="selectGoalStatus('completed')">
+            <div class="status-option-circle" style="background:var(--status-completed); box-shadow: 0 0 12px var(--status-completed);"></div>
+            Завершено
+        </div>
+        
+        <div class="status-option" onclick="selectGoalStatus('in_progress')">
+            <div class="status-option-circle" style="background:var(--status-process); box-shadow: 0 0 12px var(--status-process);"></div>
+            В процессе
+        </div>
+        
+        <div class="status-option" onclick="selectGoalStatus('failed')">
+            <div class="status-option-circle" style="background:var(--status-failed); box-shadow: 0 0 12px var(--status-failed);"></div>
+            Не закончена
+        </div>
+        
+        <div class="status-option" onclick="selectGoalStatus('none')">
+            <div class="status-option-circle" style="background:var(--status-none);"></div>
+            Без статуса
+        </div>
+
+        <button class="modal-cancel-btn" style="margin-top:10px" onclick="closeStatusModal()">Отмена</button>
+    </div>
+</div>
+
 <script>
 const tg = window.Telegram?.WebApp;
-const STORAGE_KEY = 'mrowsbot_v7';
+const STORAGE_KEY = 'mrowsbot_v8'; 
 
 const motivations = [
 "Даже 15 минут учебы — уже победа.",
@@ -672,8 +886,10 @@ const motivations = [
 ];
 
 let state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
-    notes:[], studies:[], reminders:[], personal:[]
+    notes:[], goals:[], studies:[], reminders:[], personal:[]
 };
+
+if(!state.goals) state.goals = [];
 
 function saveState(){
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -736,9 +952,7 @@ function launchFireworks(){
     resizeCanvas();
     canvas.classList.add('active');
     fwParticles = [];
-
     const colors = ['#a78bfa','#60a5fa','#f472b6','#34d399','#fbbf24','#f87171'];
-
     for(let i=0;i<12;i++){
         const x = Math.random()*canvas.width;
         const y = Math.random()*canvas.height*0.6;
@@ -756,10 +970,8 @@ function launchFireworks(){
             });
         }
     }
-
     if(fwFrame) cancelAnimationFrame(fwFrame);
     animateFireworks();
-
     setTimeout(()=>{
         canvas.classList.remove('active');
         fwParticles = [];
@@ -791,9 +1003,10 @@ function animateFireworks(){
     }
 }
 
-/* ── MODAL EDITOR ── */
+/* ── MODALS (EDIT & STATUS) ── */
 let modalQuill = null;
 let modalCallback = null;
+let activeGoalIdForStatus = null;
 
 function openEditModal(config){
     const modal = document.getElementById('editModal');
@@ -837,8 +1050,55 @@ function closeEditModal(){
     modalCallback = null;
 }
 
+function openStatusModal(goalId){
+    activeGoalIdForStatus = goalId;
+    document.getElementById('statusModal').classList.add('open');
+}
+
+function closeStatusModal(){
+    document.getElementById('statusModal').classList.remove('open');
+    activeGoalIdForStatus = null;
+}
+
+function selectGoalStatus(status){
+    if(activeGoalIdForStatus){
+        const goal = state.goals.find(g => g.id === activeGoalIdForStatus);
+        if(goal){
+            goal.status = status;
+            saveState();
+            renderAll();
+        }
+    }
+    closeStatusModal();
+}
+
 /* ── CREATE CARD ── */
 function createCard(item, type){
+    if(type === 'goals'){
+        const card = document.createElement('div');
+        card.className = 'goal-card fade-in';
+        card.setAttribute('data-status', item.status || 'none');
+        card.id = `goal-${item.id}`;
+
+        card.innerHTML = `
+            <div class="goal-content-text">${item.text}</div>
+            <button class="goal-status-btn" title="Выбрать статус"></button>
+            <button class="delete-btn" style="max-width:40px; margin-left:12px; padding:8px; border-radius:10px;">🗑</button>
+        `;
+
+        const statusBtn = card.querySelector('.goal-status-btn');
+        statusBtn.onclick = () => openStatusModal(item.id);
+
+        card.querySelector('.delete-btn').onclick = () => {
+            state.goals = state.goals.filter(x => x.id !== item.id);
+            saveState();
+            renderAll();
+            showToast('Цель удалена');
+        };
+
+        return card;
+    }
+
     const card = document.createElement('div');
     card.className = 'item-card fade-in';
 
@@ -906,6 +1166,7 @@ function renderSection(type, id){
 
 function renderAll(){
     renderSection('notes','notesList');
+    renderSection('goals','goalsList');
     renderSection('studies','studyList');
     renderSection('reminders','reminderList');
     renderSection('personal','personalList');
@@ -927,112 +1188,124 @@ function addReminder(){
     showToast('Напоминание создано');
 }
 
+/* ── ИСПРАВЛЕННАЯ ФУНКЦИЯ И ИНИЦИАЛИЗАЦИЯ ── */
 function checkReminders(){
     const now = new Date();
+    let hasActiveAlarm = false;
+
     state.reminders.forEach(r=>{
         if(r.notified) return;
         const rd = new Date(`${r.date}T${r.time}`);
         if(now >= rd){
             r.notified = true;
+            hasActiveAlarm = true;
             showToast(`🔔 ${r.title}`);
-            launchFireworks();
-            if(tg?.showAlert) tg.showAlert(`${r.title}\n\n${r.text}`);
-            if(Notification.permission==='granted'){
-                new Notification(r.title,{body:r.text,icon:'logo.png'});
-            }
-            saveState();
+            launchFireworks(); // Здесь твой код обрывался
         }
     });
+    
+    if(hasActiveAlarm){
+        saveState();
+        renderAll();
+    }
 }
 
-document.addEventListener('DOMContentLoaded', ()=>{
-    if(tg){ tg.ready(); tg.expand(); tg.setHeaderColor('#17192f'); }
-    if("Notification" in window) Notification.requestPermission();
+// Запускаем проверку напоминаний каждые 10 секунд
+setInterval(checkReminders, 10000);
 
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+let noteQuill, studyQuill;
 
-    // Study editor
-    const studyEditor = new Quill('#studyEditor', quillConfig);
+document.addEventListener("DOMContentLoaded", () => {
+    // Инициализация редакторов текста
+    noteQuill = new Quill('#noteEditor', quillConfig);
+    studyQuill = new Quill('#studyEditor', quillConfig);
 
-    // Note editor
-    const noteEditor = new Quill('#noteEditor', quillConfig);
-
-    document.getElementById('motivationText').textContent =
-        motivations[Math.floor(Math.random()*motivations.length)];
-
-    renderAll();
-    setInterval(checkReminders, 15000);
-
-    // Nav
-    document.querySelectorAll('.nav-btn').forEach(btn=>{
-        btn.onclick = ()=>{
-            if(btn.dataset.tab) switchTab(btn.dataset.tab);
-        };
+    // Навигация
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            switchTab(e.target.dataset.tab);
+        });
     });
 
-    // Add note
-    document.getElementById('addNoteBtn').onclick = ()=>{
+    // Сохранение Заметки
+    document.getElementById('addNoteBtn').onclick = () => {
         const title = document.getElementById('noteTitle').value.trim();
-        const text  = noteEditor.root.innerHTML;
-        if(!title || text==='<p><br></p>'){ showToast('Заполни поля'); return; }
-        state.notes.push({ id:uid(), title, text });
-        saveState(); renderAll();
-        document.getElementById('noteTitle').value='';
-        noteEditor.root.innerHTML='';
-        showToast('Сохранено');
+        const text = noteQuill.root.innerHTML;
+        if(!title || text === '<p><br></p>') { showToast('Заполни поля'); return; }
+        state.notes.push({ id: uid(), title, text });
+        saveState();
+        renderAll();
+        document.getElementById('noteTitle').value = '';
+        noteQuill.root.innerHTML = '';
+        showToast('Заметка сохранена');
     };
 
-    // Add personal
-    document.getElementById('addPersonalBtn').onclick = ()=>{
-        const title = document.getElementById('personalTitle').value.trim();
-        const text  = document.getElementById('personalText').value.trim();
-        if(!title||!text){ showToast('Заполни поля'); return; }
-        state.personal.push({ id:uid(), title, text });
-        saveState(); renderAll();
-        document.getElementById('personalTitle').value='';
-        document.getElementById('personalText').value='';
-        showToast('Сохранено');
+    // Сохранение Цели
+    document.getElementById('addGoalBtn').onclick = () => {
+        const text = document.getElementById('goalInput').value.trim();
+        if(!text) { showToast('Введите цель'); return; }
+        state.goals.push({ id: uid(), text, status: 'none' });
+        saveState();
+        renderAll();
+        document.getElementById('goalInput').value = '';
+        showToast('Цель добавлена');
     };
 
-    // Add reminder
+    // Сохранение Учебы
+    document.getElementById('addStudyBtn').onclick = () => {
+        const title = document.getElementById('studyTitle').value.trim();
+        const text = studyQuill.root.innerHTML;
+        if(!title || text === '<p><br></p>') { showToast('Заполни поля'); return; }
+        state.studies.push({ id: uid(), title, text });
+        saveState();
+        renderAll();
+        document.getElementById('studyTitle').value = '';
+        studyQuill.root.innerHTML = '';
+        showToast('Запись сохранена');
+    };
+
+    // Сохранение Напоминания
     document.getElementById('addReminderBtn').onclick = addReminder;
 
-    // Add study
-    document.getElementById('addStudyBtn').onclick = ()=>{
-        const title = document.getElementById('studyTitle').value.trim();
-        const text  = studyEditor.root.innerHTML;
-        if(!title || text==='<p><br></p>'){ showToast('Заполни поля'); return; }
-        state.studies.push({ id:uid(), title, text });
-        saveState(); renderAll();
-        document.getElementById('studyTitle').value='';
-        studyEditor.root.innerHTML='';
-        showToast('Учебная запись сохранена');
+    // Сохранение Личного
+    document.getElementById('addPersonalBtn').onclick = () => {
+        const title = document.getElementById('personalTitle').value.trim();
+        const text = document.getElementById('personalText').value.trim();
+        if(!title || !text) { showToast('Заполни поля'); return; }
+        state.personal.push({ id: uid(), title, text });
+        saveState();
+        renderAll();
+        document.getElementById('personalTitle').value = '';
+        document.getElementById('personalText').value = '';
+        showToast('Сохранено');
     };
 
-    // Modal save
-    document.getElementById('modalSaveBtn').onclick = ()=>{
-        if(!modalCallback) return;
-        const newTitle = document.getElementById('modalTitleInput').value.trim();
-        let newText;
-        if(document.getElementById('modalEditorWrap').style.display!=='none' && modalQuill){
-            newText = modalQuill.root.innerHTML;
+    // Модальное окно редактирования
+    document.getElementById('modalCancelBtn').onclick = closeEditModal;
+    document.getElementById('modalSaveBtn').onclick = () => {
+        const title = document.getElementById('modalTitleInput').value.trim();
+        let text = '';
+        if (document.getElementById('modalTextInput').style.display !== 'none') {
+            text = document.getElementById('modalTextInput').value.trim();
         } else {
-            newText = document.getElementById('modalTextInput').value.trim();
+            text = modalQuill.root.innerHTML;
         }
-        const newDate = document.getElementById('modalDate').value;
-        const newTime = document.getElementById('modalTime').value;
-        if(!newTitle){ showToast('Заполни заголовок'); return; }
-        modalCallback(newTitle, newText, newDate, newTime);
+        const date = document.getElementById('modalDate').value;
+        const time = document.getElementById('modalTime').value;
+
+        if (modalCallback) modalCallback(title, text, date, time);
         closeEditModal();
     };
 
-    document.getElementById('modalCancelBtn').onclick = closeEditModal;
+    // Случайная мотивация при старте
+    document.getElementById('motivationText').textContent = motivations[Math.floor(Math.random() * motivations.length)];
 
-    document.getElementById('editModal').addEventListener('click', (e)=>{
-        if(e.target===document.getElementById('editModal')) closeEditModal();
-    });
+    // Первый рендер всего содержимого
+    renderAll();
+    
+    if(tg) tg.ready();
 });
+
 </script>
 </body>
 </html>
